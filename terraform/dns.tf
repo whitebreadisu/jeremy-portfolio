@@ -29,3 +29,17 @@ resource "google_dns_record_set" "portfolio_root_verification_txt" {
 
   rrdatas = ["\"hosting-site=jeremy-portfolio-prod\""]
 }
+
+# Record Firebase Hosting requires for the swu.jeremybradenapps.com custom
+# domain (Stage E, swu-prod project) - sourced from
+# google_firebase_hosting_custom_domain.swu_subdomain.required_dns_updates
+# in SWU-Inventory-Manager's terraform/environments/prod.
+resource "google_dns_record_set" "swu_subdomain_cname" {
+  project      = var.project_id
+  managed_zone = google_dns_managed_zone.portfolio.name
+  name         = "swu.jeremybradenapps.com."
+  type         = "CNAME"
+  ttl          = 3600
+
+  rrdatas = ["swu-prod.web.app."]
+}
